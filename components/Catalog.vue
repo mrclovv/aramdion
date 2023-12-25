@@ -4,7 +4,7 @@
       <!-- <div class="products" v-for="product in products" :key="product.id">
           <Product :product="product" />
         </div> -->
-      <div class="products" v-for="product in FilteredItems" :key="product.id">
+      <div class="products" v-for="product in products" :key="product.id">
         <Product :product="product" />
       </div>
     </div>
@@ -12,39 +12,27 @@
 </template>
 
 <script setup>
-const { products, select_left__range, select_right__range } = defineProps([
-  "products",
-  "select_left__range",
-  "select_right__range",
-]);
-const FilteredItems = ref([]);
-
-const applyFilters = () => {
-  FilteredItems.value = products.filter((product) => {
-    return (
-      product.price >= select_left__range &&
-      product.price <= select_right__range
-    );
+const { products, select_left__range, select_right__range, searchQuery } =
+  defineProps(["products", "select_left__range", "select_right__range"]);
+// const FilteredItems = ref([]);
+// отслеживание каждого нажатия на клавишу в js`е и передача этих данных
+// console.log(products[0].title);
+const filteredCards = () => {
+  var self = this;
+  const filtered = this.products.filter(function (product) {
+    return product.title;
   });
+
+  return filtered;
 };
-watch([select_left__range, select_right__range], () => {
-  applyFilters();
-});
-
-const unwatchProducts = watch(
-  () => products,
-  () => {
-    applyFilters();
-  },
-);
-
-onMounted(() => {
-  applyFilters();
-});
-
-onBeforeUnmount(() => {
-  unwatchProducts();
-});
+// const applyFilters = () => {
+//   FilteredItems.value = products.filter(product => {
+//     return (
+//       product.price >= select_left__range &&
+//       product.price <= select_right__range
+//     );
+//   });
+// };
 </script>
 
 <style lang="scss">
